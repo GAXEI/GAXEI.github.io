@@ -1,12 +1,306 @@
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Jellyfish Merge</title>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      background: #06152b;
+      color: white;
+      overflow-x: hidden;
+    }
+
+    .hero {
+      min-height: 100vh;
+      background:
+        linear-gradient(rgba(4, 14, 36, 0.35), rgba(4, 14, 36, 0.95)),
+        url("images/banner.png") center/cover no-repeat;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 40px 20px;
+      position: relative;
+    }
+
+    .hero-content {
+      max-width: 850px;
+      animation: fadeIn 1.2s ease;
+    }
+
+    .logo {
+      width: 180px;
+      height: 180px;
+      border-radius: 36px;
+      margin-bottom: 22px;
+      box-shadow: 0 20px 45px rgba(0, 0, 0, 0.35);
+      animation: float 3.5s ease-in-out infinite;
+    }
+
+    h1 {
+      font-size: clamp(3rem, 8vw, 6rem);
+      color: #ffffff;
+      text-shadow: 0 5px 20px rgba(0, 0, 0, 0.5);
+      margin-bottom: 14px;
+    }
+
+    .subtitle {
+      font-size: clamp(1.1rem, 3vw, 1.5rem);
+      color: #dff8ff;
+      max-width: 650px;
+      margin: 0 auto 28px;
+      line-height: 1.5;
+    }
+
+    .buttons {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      display: inline-block;
+      text-decoration: none;
+      padding: 15px 26px;
+      border-radius: 999px;
+      font-weight: bold;
+      transition: 0.25s ease;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #51d6ff, #7cf7d4);
+      color: #052033;
+      box-shadow: 0 10px 30px rgba(81, 214, 255, 0.35);
+    }
+
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.15);
+      color: white;
+      border: 1px solid rgba(255, 255, 255, 0.35);
+      backdrop-filter: blur(8px);
+    }
+
+    .btn:hover {
+      transform: translateY(-4px);
+    }
+
+    section {
+      padding: 80px 20px;
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: auto;
+    }
+
+    .section-title {
+      text-align: center;
+      font-size: clamp(2rem, 5vw, 3rem);
+      margin-bottom: 18px;
+      color: #9ff6ff;
+    }
+
+    .section-text {
+      text-align: center;
+      max-width: 760px;
+      margin: 0 auto;
+      color: #d7f7ff;
+      font-size: 1.1rem;
+      line-height: 1.7;
+    }
+
+    .about {
+      background: linear-gradient(180deg, #06152b, #0b2d4d);
+    }
+
+    .screenshots {
+      background: #0b2d4d;
+    }
+
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      margin-top: 45px;
+    }
+
+    .gallery img {
+      width: 100%;
+      border-radius: 28px;
+      box-shadow: 0 20px 45px rgba(0, 0, 0, 0.35);
+      transition: 0.25s ease;
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    .gallery img:hover {
+      transform: translateY(-8px) scale(1.02);
+    }
+
+    .developer {
+      background: linear-gradient(180deg, #0b2d4d, #06152b);
+      text-align: center;
+    }
+
+    .card {
+      max-width: 650px;
+      margin: 35px auto 0;
+      padding: 32px;
+      border-radius: 28px;
+      background: rgba(255, 255, 255, 0.09);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      backdrop-filter: blur(10px);
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
+    }
+
+    .card h3 {
+      font-size: 1.7rem;
+      margin-bottom: 12px;
+      color: #ffffff;
+    }
+
+    .card p, .card a {
+      color: #d7f7ff;
+      line-height: 1.7;
+    }
+
+    footer {
+      padding: 28px 20px;
+      text-align: center;
+      color: #a9dce8;
+      background: #031021;
+      font-size: 0.95rem;
+    }
+
+    .bubble {
+      position: absolute;
+      bottom: -80px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.25);
+      animation: rise 10s infinite ease-in;
+    }
+
+    .bubble:nth-child(1) { width: 25px; height: 25px; left: 10%; animation-delay: 0s; }
+    .bubble:nth-child(2) { width: 18px; height: 18px; left: 25%; animation-delay: 2s; }
+    .bubble:nth-child(3) { width: 30px; height: 30px; left: 70%; animation-delay: 1s; }
+    .bubble:nth-child(4) { width: 14px; height: 14px; left: 85%; animation-delay: 3s; }
+
+    @keyframes rise {
+      0% { transform: translateY(0); opacity: 0; }
+      20% { opacity: 1; }
+      100% { transform: translateY(-110vh); opacity: 0; }
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-12px); }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(25px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 800px) {
+      .gallery {
+        grid-template-columns: 1fr;
+        max-width: 360px;
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      .logo {
+        width: 145px;
+        height: 145px;
+      }
+
+      section {
+        padding: 60px 18px;
+      }
+    }
+  </style>
 </head>
+
 <body>
-  <h1>Jellyfish Merge</h1>
-  <p>Official website coming soon.</p>
+  <header class="hero">
+    <span class="bubble"></span>
+    <span class="bubble"></span>
+    <span class="bubble"></span>
+    <span class="bubble"></span>
+
+    <div class="hero-content">
+      <img src="images/logo.png" alt="Jellyfish Merge Logo" class="logo" />
+      <h1>Jellyfish Merge</h1>
+      <p class="subtitle">
+        Merge adorable jellyfish, discover new evolutions and climb the leaderboard
+        in a relaxing ocean puzzle game.
+      </p>
+
+      <div class="buttons">
+        <a class="btn btn-primary" href="https://play.google.com/store/apps/details?id=com.GAXEI.JellyfishMerge&pcampaignid=web_share" target="_blank">
+          Get it on Google Play
+        </a>
+
+        <a class="btn btn-secondary" href="https://sites.google.com/view/privacy-policy-jellyfish-merge/p%C3%A1gina-principal" target="_blank">
+          Privacy Policy
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <section class="about">
+    <div class="container">
+      <h2 class="section-title">About the Game</h2>
+      <p class="section-text">
+        Jellyfish Merge is a casual puzzle game where players drop and merge cute jellyfish
+        to create bigger and more colorful creatures. The goal is simple: keep merging,
+        reach higher levels, beat your score and compete with other players through the leaderboard.
+      </p>
+    </div>
+  </section>
+
+  <section class="screenshots">
+    <div class="container">
+      <h2 class="section-title">Screenshots</h2>
+
+      <div class="gallery">
+        <img src="images/ss1.png" alt="Jellyfish Merge screenshot 1" />
+        <img src="images/ss2.png" alt="Jellyfish Merge screenshot 2" />
+        <img src="images/ss3.png" alt="Jellyfish Merge screenshot 3" />
+      </div>
+    </div>
+  </section>
+
+  <section class="developer">
+    <div class="container">
+      <h2 class="section-title">Developer</h2>
+
+      <div class="card">
+        <h3>GAXEI</h3>
+        <p>
+          Independent developer of Jellyfish Merge.
+        </p>
+        <p>
+          Contact:
+          <a href="mailto:jellymgax@gmail.com">jellymgax@gmail.com</a>
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    © 2026 GAXEI. Jellyfish Merge. All rights reserved.
+  </footer>
 </body>
 </html>
+```
